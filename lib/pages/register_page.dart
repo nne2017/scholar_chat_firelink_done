@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:scholar_chat/component/custom_button.dart';
 import 'package:scholar_chat/component/custom_textfield.dart';
@@ -7,6 +8,8 @@ import 'package:scholar_chat/pages/login_page.dart';
 class RegisterPage extends StatelessWidget {
   RegisterPage({Key? key}) : super(key: key);
   static String id = 'registerPage';
+  String? userEmail;
+  String? userPassword;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,15 +56,57 @@ class RegisterPage extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
-            const CustomTextField(hintText: 'Email'),
+            CustomTextField(
+              hintText: 'Email',
+              onChanged: (data) {
+                userEmail = data;
+              },
+            ),
             const SizedBox(
               height: 10,
             ),
-            const CustomTextField(hintText: 'Password'),
+            CustomTextField(
+              hintText: 'Password',
+              onChanged: (data) {
+                userPassword = data;
+              },
+            ),
             const SizedBox(
               height: 20,
             ),
-            CustomButton(customText: 'Register'),
+            CustomButton(
+              //button register
+              onTap: () async {
+                //and check for email  & password with firebase
+                try {
+                  UserCredential userCredential = await FirebaseAuth.instance
+                      .createUserWithEmailAndPassword(
+                          email: userEmail!, password: userPassword!);
+                } on FirebaseAuthException catch (e) {
+                  //e for error to handel
+                  if (e.code == 'weak-password') {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('weak password'),
+                      ),
+                    );
+                  } else if (e.code == 'email-already-in-use') {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Email already in use'),
+                      ),
+                    );
+                  }
+                }
+                // if no error it show snakebar for success
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Success'),
+                  ),
+                );
+              },
+              customText: 'Register',
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
