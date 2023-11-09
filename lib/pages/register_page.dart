@@ -7,7 +7,6 @@ import 'package:scholar_chat/constants.dart';
 import 'package:scholar_chat/helper/show_snake_bar.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
   static String id = 'registerPage';
 
   @override

@@ -4,10 +4,13 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:scholar_chat/component/custom_button.dart';
 import 'package:scholar_chat/component/custom_textfield.dart';
 import 'package:scholar_chat/helper/show_snake_bar.dart';
+import 'package:scholar_chat/pages/chat_page.dart';
 import 'package:scholar_chat/pages/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
+
+  static String id = 'LoginPage';
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -95,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                       try {
                         // Method to log in user
                         await loginUser();
-                        showSnakeBar(context, 'Success');
+                        Navigator.pushNamed(context, ChatPage.id);
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
                           showSnakeBar(context, 'Wrong Password or Email.');
